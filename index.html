@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d12">
+  <title>Reverse Voice</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">RV</div>
+        <div>
+          <h1>Reverse Voice</h1>
+          <p>Sound beyond direction.</p>
+        </div>
+      </div>
+
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <main>
+
+      <section class="record-card">
+        <div class="mic-circle">
+          <span>🎙</span>
+        </div>
+
+        <h2 id="status">Ready to record</h2>
+        <p id="timer">00:00</p>
+
+        <button id="recordBtn" class="record-btn">
+          <span class="record-dot"></span>
+          Record
+        </button>
+      </section>
+
+      <section class="playback">
+        <h3>Playback modes</h3>
+
+        <div class="mode-grid">
+
+          <button class="mode-btn" id="normalBtn">
+            <span class="mode-icon">▶</span>
+            <span>Normal</span>
+          </button>
+
+          <button class="mode-btn" id="reverseBtn">
+            <span class="mode-icon">↶</span>
+            <span>Reverse</span>
+          </button>
+
+          <button class="mode-btn" id="slowBtn">
+            <span class="mode-icon">◷</span>
+            <span>Slow Reverse</span>
+          </button>
+
+        </div>
+
+        <button id="stopPlaybackBtn" class="stop-btn">
+          ■ Stop playback
+        </button>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>PRIVATE BY DESIGN · AUDIO STAYS ON YOUR DEVICE</p>
+    </footer>
+
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h2>Settings</h2>
+      <button id="closeDrawer">✕</button>
+    </div>
+
+    <div class="setting">
+      <h3>Slow Reverse Speed</h3>
+      <p>Choose how slow your reversed recording plays.</p>
+
+      <div class="speed-options">
+        <button data-speed="1.25">1.25×</button>
+        <button data-speed="1.5">1.5×</button>
+        <button data-speed="1.7">1.7×</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>
