@@ -27,18 +27,22 @@ let timerInterval = null;
 // Playback
 let audioPlayer = null;
 
-// Drawer
-menuBtn.onclick = () => {
+// Drawer controls
+function openMenu() {
   drawer.classList.add("open");
   drawerOverlay.classList.add("open");
-};
+}
 
-closeDrawer.onclick = drawerOverlay.onclick = () => {
+function closeMenu() {
   drawer.classList.remove("open");
   drawerOverlay.classList.remove("open");
-};
+}
 
-// Speed settings
+menuBtn.onclick = openMenu;
+closeDrawer.onclick = closeMenu;
+drawerOverlay.onclick = closeMenu;
+
+// Slow reverse speed options
 document.querySelectorAll("[data-speed]").forEach(button => {
   button.onclick = () => {
     slowSpeed = Number(button.dataset.speed);
@@ -51,7 +55,7 @@ document.querySelectorAll("[data-speed]").forEach(button => {
   };
 });
 
-// Timer
+// Recording timer
 function updateTimer() {
   const elapsed = Math.floor((Date.now() - startTime) / 1000);
   const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
@@ -63,12 +67,21 @@ function updateTimer() {
 // Start recording
 async function startRecording() {
   try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error("Microphone recording is not supported in this browser.");
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true
     });
 
     audioChunks = [];
     audioBlob = null;
+
+    if (audioPlayer) {
+      audioPlayer.pause();
+      audioPlayer = null;
+    }
 
     mediaRecorder = new MediaRecorder(stream);
 
@@ -80,7 +93,7 @@ async function startRecording() {
 
     mediaRecorder.onstop = () => {
       audioBlob = new Blob(audioChunks, {
-        type: mediaRecorder.mimeType
+        type: mediaRecorder.mimeType || "audio/webm"
       });
 
       stream.getTracks().forEach(track => track.stop());
@@ -99,7 +112,7 @@ async function startRecording() {
     recordBtn.innerHTML = '<span class="record-dot"></span> Stop';
     statusText.textContent = "Recording...";
   } catch (error) {
-    alert("Microphone access failed. Please allow microphone permission.");
+    alert("Microphone error: " + error.name + "\n" + error.message);
     console.error(error);
   }
 }
@@ -119,20 +132,21 @@ function stopRecording() {
 
 // Record button
 recordBtn.onclick = () => {
-  if (!recording) {
-    startRecording();
-  } else {
+  if (recording) {
     stopRecording();
+  } else {
+    startRecording();
   }
 };
 
-// Placeholder playback controls
+// Playback placeholders
 normalBtn.onclick = () => {
   if (!audioBlob) {
     alert("Please record something first.");
     return;
   }
-  alert("Normal playback will be added in the next step.");
+
+  alert("Normal playback will be implemented next.");
 };
 
 reverseBtn.onclick = () => {
@@ -140,7 +154,8 @@ reverseBtn.onclick = () => {
     alert("Please record something first.");
     return;
   }
-  alert("Reverse playback will be added in the next step.");
+
+  alert("Reverse playback will be implemented next.");
 };
 
 slowBtn.onclick = () => {
@@ -148,7 +163,8 @@ slowBtn.onclick = () => {
     alert("Please record something first.");
     return;
   }
-  alert("Slow reverse playback will be added in the next step.");
+
+  alert("Slow reverse playback will be implemented next. Selected speed: " + slowSpeed + "×");
 };
 
 stopPlaybackBtn.onclick = () => {
@@ -157,4 +173,3 @@ stopPlaybackBtn.onclick = () => {
     audioPlayer.currentTime = 0;
   }
 };
-
